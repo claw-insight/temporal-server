@@ -1,9 +1,9 @@
 services:
   postgresql:
-    image: postgres:${POSTGRESQL_VERSION}
+    image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/postgres:${POSTGRESQL_VERSION}
     container_name: temporal-postgresql
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       POSTGRES_PASSWORD: temporal
       POSTGRES_USER: temporal
@@ -19,7 +19,7 @@ services:
       start_period: 30s
 
   elasticsearch:
-    image: elasticsearch:${ELASTICSEARCH_VERSION}
+    image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/elastic/elasticsearch:${ELASTICSEARCH_VERSION}
     container_name: temporal-elasticsearch
     ports:
       - "9200:9200"
@@ -41,7 +41,7 @@ services:
       start_period: 30s
 
   temporal-admin-tools:
-    image: temporalio/admin-tools:${TEMPORAL_ADMINTOOLS_VERSION}
+    image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/temporalio/admin-tools:${TEMPORAL_ADMINTOOLS_VERSION}
     container_name: temporal-admin-tools
     restart: on-failure:6
     depends_on:
@@ -69,7 +69,7 @@ services:
     command: /scripts/setup-postgres-es.sh
 
   temporal:
-    image: temporalio/server:${TEMPORAL_VERSION}
+    image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/temporalio/server:${TEMPORAL_VERSION}
     container_name: temporal
     depends_on:
       temporal-admin-tools:
@@ -99,7 +99,7 @@ services:
       retries: 60
 
   temporal-create-namespace:
-    image: temporalio/admin-tools:${TEMPORAL_ADMINTOOLS_VERSION}
+    image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/temporalio/admin-tools:${TEMPORAL_ADMINTOOLS_VERSION}
     container_name: temporal-create-namespace
     restart: on-failure:5
     depends_on:
@@ -123,7 +123,7 @@ services:
     environment:
       - TEMPORAL_ADDRESS=temporal:7233
       - TEMPORAL_CORS_ORIGINS=http://localhost:3000
-    image: temporalio/ui:${TEMPORAL_UI_VERSION}
+    image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/temporalio/ui:${TEMPORAL_UI_VERSION}
     networks:
       - temporal-network
     ports:
